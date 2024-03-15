@@ -2,83 +2,101 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>infinite-id</title>
-<link href="./DreamBooth_files/style.css" rel="stylesheet">
-<script type="text/javascript" src="./DreamBooth_files/jquery.mlens-1.0.min.js"></script> 
-<script type="text/javascript" src="./DreamBooth_files/jquery.js"></script>
+<link href="./files/style.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- <script type="text/javascript" src="./DreamBooth_files/jquery.mlens-1.0.min.js"></script> 
+<script type="text/javascript" src="./DreamBooth_files/jquery.js"></script> -->
 </head>
 
 <body>
 <div class="content">
   <h1><strong>Infinite-ID: Identity-preserved Personalization via ID-semantics Decoupling Paradigm</strong></h1>
-  <p id="authors"><span><a href="https://natanielruiz.github.io/"></a></span><a href="https://natanielruiz.github.io/">Nataniel Ruiz</a	> <a href="http://people.csail.mit.edu/yzli/">Yuanzhen Li</a> <a href="https://varunjampani.github.io/">Varun Jampani</a> <a href="https://research.google/people/106214/">Yael Pritch</a> <a href="http://people.csail.mit.edu/mrub/">Michael Rubinstein</a> <a href="https://kfiraberman.github.io/">Kfir Aberman</a><br>
+  <p id="authors"><a>Yi Wu<sup>1*</sup></a> <a>Ziqiang Li<sup>1*</sup></a> <a>Heliang Zheng<sup>1**</sup></a> <a>Chaoyue Wang<sup>2**</sup></a> <a>Bin Li<sup>1<i class="fas fa-envelope"></i></sup></a> <br>
     <br>
-  <span style="font-size: 24px">Google Research
+  <span style="font-size: 24px"><a><sup>1</sup>University of Science and Technology of China</a> <a><sup>2</sup>The University of Sydney</a><br>
+  <br>
+  <span style="font-size: 24px"><a><sup>*</sup>Equal contribution</a><a><sup>**</sup>Project leader</a><a><sup><i class="fas fa-envelope"></i></sup>Corresponding author</a><br>
   </span></p>
   <br>
-  <img src="./DreamBooth_files/teaser_static.jpg" class="teaser-gif" style="width:100%;"><br>
-  <h3 style="text-align:center"><em>It’s like a photo booth, but once the subject is captured, it can be synthesized wherever your dreams take you…</em></h3>
-    <font size="+2">
+  <img src="./assets/firstphoto.png" class="teaser-gif" style="width:100%;"><br>
+  <h3 style="text-align:center"><em>With just a single reference image, our Infinite-ID framework excels in synthesizing high-quality images while maintaining superior identity fidelity and text semantic consistency in various styles. </em></h3>
+    <!-- <font size="+2">
           <p style="text-align: center;">
             <a href="https://arxiv.org/abs/2208.12242" target="_blank">[Paper]</a> &nbsp;&nbsp;&nbsp;&nbsp;
 	    (<font color="#C70039">new!</font>) <a href="https://github.com/google/dreambooth" target="_blank">[Dataset]</a> &nbsp;&nbsp;&nbsp;&nbsp;
             <a href="DreamBooth_files/bibtex.txt" target="_blank">[BibTeX]</a>
           </p>
-    </font>
+    </font> -->
 </div>
+
 <div class="content">
   <h2 style="text-align:center;">Abstract</h2>
-  <p>Large text-to-image models achieved a remarkable leap in the evolution of AI, enabling high-quality and diverse synthesis of images from a given text prompt. However, these models lack the ability to mimic the appearance of subjects in a given reference set and synthesize novel renditions of them in different contexts. In this work, we present a new approach for "personalization" of text-to-image diffusion models (specializing them to users' needs). Given as input just a few images of a subject, we fine-tune a pretrained text-to-image model (Imagen, although our method is not limited to a specific model) such that it learns to bind a unique identifier with that specific subject. Once the subject is embedded in the output domain of the model, the unique identifier can then be used to synthesize fully-novel photorealistic images of the subject contextualized in different scenes. By leveraging the semantic prior embedded in the model with a new autogenous class-specific prior preservation loss, our technique enables synthesizing the subject in diverse scenes, poses, views, and lighting conditions that do not appear in the reference images. We apply our technique to several previously-unassailable tasks, including subject recontextualization, text-guided view synthesis, appearance modification, and artistic rendering (all while preserving the subject's key features).</p>
+  <p>Drawing on recent advancements in diffusion models for text-to-image generation, identity-preserved personalization has made significant progress in accurately capturing specific identities with just a single reference image. However, existing methods primarily integrate reference images within the text embedding space, leading to a complex entanglement of image and text information, which poses challenges for preserving both identity fidelity and semantic consistency. To tackle this challenge, we propose <b>Infinite-ID</b>, an ID-semantics decoupling paradigm for identity-preserved personalization. Specifically, we introduce identity-enhanced training, incorporating an additional image cross-attention module to capture sufficient ID information while <i>deactivating the original text cross-attention module</i> of the diffusion model. This ensures that the image stream faithfully represents the identity provided by the reference image while mitigating interference from textual input. Additionally, we introduce a feature interaction mechanism that combines a mixed attention module with an AdaIN-mean operation to seamlessly merge the two streams. This mechanism not only enhances the fidelity of identity and semantic consistency but also enables convenient control over the styles of the generated images. Extensive experimental results on both raw photo generation and style image generation demonstrate the superior performance of our proposed method.</p>
 </div>
-<div class="content">
+
+<!-- <div class="content">
   <h2>Background</h2>
   <p> Given a particular subject such as clock (shown in the real images on the left), it is very challenging to generate it in different contexts with state-of-the-art text-to-image models, while maintaining high fidelity to its key visual features. Even with dozens of iterations over a text prompt that contains a detailed description of the appearance of the clock (<em>"retro style yellow alarm clock with a white clock face and a yellow number three on the right part of the clock face in the jungle"</em>), the Imagen model [Saharia et al., 2022] can't reconstruct its key visual features (third column). Furthermore, even models whose text embedding lies in a shared language-vision space and can create semantic variations of the image, such as DALL-E2 [Ramesh et al., 2022], can neither reconstruct the appearance of the given subject nor modify the context (second column). In contrast, our approach (right) can synthesize the clock with high fidelity and in new contexts (<em>"a [V] clock in the jungle"</em>).</p>
   <br>
   <img class="summary-img" src="./DreamBooth_files/background.png" style="width:100%;"> <br>
-</div>
+</div> -->
+
 <div class="content">
-  <h2>Approach</h2>
-  <p> Our method takes as input a few images (typically 3-5 images suffice, based on our experiments) of a subject (e.g., a specific dog) and the corresponding class name (e.g. "dog"), and returns a fine-tuned/"personalized'' text-to-image model that encodes a unique identifier that refers to the subject. Then, at inference, we can implant the unique identifier in different sentences to synthesize the subjects in difference contexts.</p>
+  <h2>Method</h2>
+  <p> We introduce our ID-semantics decoupling paradigm to effectively address the severe trade-off between high-fidelity identity and semantic consistency within identity-preserved personalization. Subsequently, we employ our mixed attention mechanism to seamlessly integrate ID information and semantic information within the diffusion model during the inference stage.</p>
   <br>
-  <img class="summary-img" src="./DreamBooth_files/high_level.png" style="width:100%;"> <br>
-  <p>Given ~3-5 images of a subject we fine tune a text-to-image diffusion in two steps: (a) fine tuning the low-resolution text-to-image model with the input images paired with a text prompt containing a unique identifier and the name of the class the subject belongs to (e.g., "A photo of a [T] dog”), in parallel, we apply a class-specific prior preservation loss, which leverages the semantic prior that the model has on the class and encourages it to generate diverse instances belong to the subject's class by injecting the class name in the text prompt (e.g., "A photo of a dog”). (b) fine-tuning the super resolution components with pairs of low-resolution and high-resolution images taken from our input images set, which enables us to maintain high-fidelity to small details of the subject.</p>
+  <img class="summary-img" src="./assets/decoupling.png" style="width:80%;"> <br>
+  <!-- <p>We utilize an adaptive mean normalization (AdaIN-mean) operation to precisely align the style of the synthesized image with the desired style prompts.</p>
   <br>
-  <img class="summary-img" src="./DreamBooth_files/system.png" style="width:100%;"> <br>
+  <img class="summary-img" src="./assets/mixedattention.png" style="width:25%;"> <br> -->
 </div>
+
 <div class="content">
-  <h2>Results</h2>
-  <p>Results for re-contextualization of a bag and vase subject instances. By finetuning a model using our method we are able to generate different images of the a subject instance in different environments, with high preservation of subject details and realistic interaction between the scene and the subject. We display the conditioning prompts below each image. </p>
-<img class="summary-img" src="./DreamBooth_files/results.png" style="width:100%;">
+  <h2>Raw photo generation</h2>
+  <p>Results for raw photo generation. The demonstrate identites are ordinary people sampled from FFHQ dataset.</p>
+<img class="summary-img" src="./assets/raw photo.png" style="width:70%;">
 </div>
+
 <div class="content">
-  <h2>Art Rendition</h2>
-  <p>Original artistic renditions of our subject dog in the style of famous painters. We remark that many of the generated poses were not seen in the training set, such as the Van Gogh and Warhol rendition. We also note that some renditions seem to have novel composition and faithfully imitate the style of the painter - even suggesting some sort of creativity (extrapolation given previous knowledge).</p>
+  <h2>Style photo generation</h2>
+  <p>Results for style photo generation. The demonstrate identites are ordinary people sampled from FFHQ dataset.</p>
   <br>
-  <img class="summary-img" src="./DreamBooth_files/art.png" style="width:100%;"> <br>
+  <img class="summary-img" src="./assets/style photo.png" style="width:70%;"> <br>
 </div>
+
 <div class="content">
-  <h2>Text-Guided View Synthesis</h2>
-  <p>Our technique can synthesized images with specified viewpoints for a subject cat (left to right: top, bottom, side and back views). Note that the generated poses are  different from the input poses, and the background changes in a realistic manner given a pose change. We also highlight the preservation of complex fur patterns on the subject cat's forehead.</p>
+  <h2>Identity mixing</h2>
+  <p>When receiving multiple input ID images from different individuals, our method can mix these identities by stacking all the identity embeddings.</p>
   <br>
-  <img class="summary-img" src="./DreamBooth_files/novel_views.png" style="width:100%;"> <br>
-</div>
-<div class="content">
-  <h2>Property Modification</h2>
-  <p>We show color modifications in the first row (using prompts ``a [color] [V] car''), and crosses between a specific dog and different animals in the second row (using prompts ``a cross of a [V] dog and a [target species]''). We highlight the fact that our method preserves unique visual features that give the subject its identity or essence, while performing the required property modification.</p>
+  <img class="summary-img" src="./assets/identity mixing.png" style="width:70%;"> <br>
+  <p>Linear interpolation of different identities.</p>
   <br>
-  <img class="summary-img" src="./DreamBooth_files/property_modification.png" style="width:100%;"> <br>
+  <img class="summary-img" src="./assets/identity interpolation.png" style="width:70%;"> <br>
 </div>
+
 <div class="content">
+  <h2>Applications on artworks to raw photo.</h2>
+  <!-- <p>We show color modifications in the first row (using prompts ``a [color] [V] car''), and crosses between a specific dog and different animals in the second row (using prompts ``a cross of a [V] dog and a [target species]''). We highlight the fact that our method preserves unique visual features that give the subject its identity or essence, while performing the required property modification.</p> -->
+  <!-- <br> -->
+  <img class="summary-img" src="./assets/artwork.png" style="width:70%;"> <br>
+</div>
+
+<!-- <div class="content">
   <h2>Accessorization</h2>
   <p>Outfitting a dog with accessories. The identity of the subject is preserved and many different outfits or accessories can be applied to the dog given a prompt of type <em>"a [V] dog wearing a police/chef/witch outfit''</em>. We observe a realistic interaction between the subject dog and the outfits or accessories, as well as a large variety of possible options.</p>
   <br>
   <img class="summary-img" src="./DreamBooth_files/accessories.png" style="width:100%;"> <br>
 </div>
+
 <div class="content">
   <h2>Societal Impact</h2>
   <p>This project aims to provide users with an effective tool for synthesizing personal subjects (animals, objects) in different contexts. While general text-to-image models might be biased towards specific attributes when synthesizing images from text, our approach enables the user to get a better reconstruction of their desirable subjects. On contrary, malicious parties might try to use such images to mislead viewers. This is a common issue, existing in other generative models approaches or content manipulation techniques. Future research in generative modeling, and specifically of personalized generative priors, must continue investigating and revalidating these concerns.</p>
   <br>
-</div>
-<div class="content">
+</div> -->
+
+<!-- <div class="content">
   <h2>BibTex</h2>
   <code> @article{ruiz2022dreambooth,<br>
   &nbsp;&nbsp;title={DreamBooth: Fine Tuning Text-to-image Diffusion Models for Subject-Driven Generation},<br>
@@ -87,11 +105,13 @@
   &nbsp;&nbsp;year={2022}<br>
   } </code> 
 </div>
+
 <div class="content" id="acknowledgements">
   <p><strong>Acknowledgements</strong>:
     We thank Rinon Gal, Adi Zicher, Ron Mokady, Bill Freeman, Dilip Krishnan, Huiwen Chang and Daniel Cohen-Or for their valuable inputs that helped improve this work, and to Mohammad Norouzi, Chitwan Saharia and William Chan for providing us with their support and the pretrained models of Imagen. Finally, a special thank you to David Salesin for his feedback, advice and for his support for the project.
     <!-- Recycling a familiar <a href="https://chail.github.io/latent-composition/">template</a> ;). --> 
   </p>
-</div>
+</div> -->
+
 </body>
 </html>
